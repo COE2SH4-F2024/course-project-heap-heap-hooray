@@ -9,7 +9,7 @@ objPos::objPos()
     pos->y = 0;
     symbol = 0; //NULL
 
-    cout << "default func called" << endl;
+    //cout << "default func called" << endl;
 }
 
 objPos::objPos(int xPos, int yPos, char sym)
@@ -29,7 +29,7 @@ objPos::objPos(int xPos, int yPos, char sym)
     pos->y = yPos;
     symbol = sym;
 
-    cout << "special member func called" << endl;
+    //cout << "special member func called" << endl;
 }
 
 // Respect the rule of six / minimum four
@@ -57,7 +57,7 @@ objPos& objPos :: operator=(const objPos&m)
         this->symbol = m.symbol;
         
     }
-    cout << "copy assigment func called" << endl;
+    //cout << "copy assigment func called" << endl;
     return *this;
 
 }
@@ -70,14 +70,14 @@ objPos :: objPos(const objPos&m)
     pos->y = m.pos->y;
     symbol = m.symbol;
 
-    cout << "copy func called" << endl;
+    //cout << "copy func called" << endl;
 }
 
 objPos :: ~objPos()
 {
     delete pos;
 
-    cout << "destroyer func called" << endl;
+    //cout << "destroyer func called" << endl;
 }
 
 

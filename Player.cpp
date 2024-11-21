@@ -4,7 +4,7 @@
 Player::Player(GameMechs* thisGMRef)
 {
     mainGameMechsRef = thisGMRef;
-    myDir = STOP;
+    direction = stop;
 
     // more actions to be included
 
@@ -12,7 +12,7 @@ Player::Player(GameMechs* thisGMRef)
     playerPos.pos->y = 5;
     playerPos.symbol = '@';
 
-    cout << "here" << endl;
+    //cout << "here" << endl;
 
 }
 
@@ -37,7 +37,42 @@ objPos Player::getPlayerPos() const
 
 void Player::updatePlayerDir()
 {
-        // PPA3 input processing logic          
+        // PPA3 input processing logic  
+        switch(input)
+        {                      
+            // case ' ':  // exit
+            //     exitFlag = 1;
+            //     printquit = 1;
+            //     break;
+            case 'w':
+                if (direction == left || direction == right || direction == stop)
+                {
+                    direction = up;
+                    //startCount = 1;
+                }
+                break;
+            case 'a':
+                if (direction == up || direction == down || direction == stop)
+                {
+                    direction = left;
+                    //startCount = 1;
+                }
+                break;
+            case 's':
+                if (direction == left || direction == right || direction == stop )
+                {
+                    direction = down;
+                    //startCount = 1;
+                }
+                break;
+            case 'd':
+                if (direction == up || direction == down || direction == stop)
+                {
+                    direction = right;
+                    //startCount = 1;
+                }
+                break;
+        }        
 }
 
 void Player::movePlayer()

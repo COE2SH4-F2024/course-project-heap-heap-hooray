@@ -92,9 +92,9 @@ void DrawScreen(void)
 {
     MacUILib_clearScreen(); 
 
-    objPos playerPos = myPlayer -> getPlayerPos();
+    objPos playerPos = myPlayer -> getPlayerPos();//this isn't actually getting used
    // MacUILib_printf("Player [x, y, symbol] = (%d, %d, %c)\n",  playerPos.pos ->x, playerPos.pos ->y, playerPos.symbol); 
-
+    // a bit redundant here, instead of calling getPlayerPos every time, we can use the playerPos object...honestly both work tho
     for (int i = 0; i < BOARD_ROWS; i++) {
         for (int j = 0; j < BOARD_COLS; j++) {
             if (i == 0 || i == BOARD_ROWS - 1 || j == 0 || j == BOARD_COLS - 1) 
