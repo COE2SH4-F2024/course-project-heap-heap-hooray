@@ -1,4 +1,5 @@
 #include "objPos.h"
+using namespace std;
 
 objPos::objPos()
 {
@@ -9,7 +10,17 @@ objPos::objPos()
 }
 
 objPos::objPos(int xPos, int yPos, char sym)
-{
+{   
+    if(xPos <= 0 || xPos >= 9 || yPos <= 0 || xPos >= 19)
+    {
+   		throw std::invalid_argument("Invalid coordinate range");
+	}
+
+    if(sym == '#')
+    {
+        throw std::invalid_argument("Invalid symbol selection");
+    }
+
     pos = new Pos;
     pos->x = xPos;
     pos->y = yPos;
@@ -19,8 +30,43 @@ objPos::objPos(int xPos, int yPos, char sym)
 // Respect the rule of six / minimum four
 // [TODO] Implement the missing special member functions to meet the minimum four rule
 
+objPos& objPos :: operator=(const objPos&m)
+{   
+    /*if(xPos <= 0 || xPos >= 9 || yPos <= 0 || xPos >= 19)
+    {
+   		throw std::invalid_argument("Invalid coordinate range");
+	}
 
+    if(sym == '#')
+    {
+        throw std::invalid_argument("Invalid symbol selection");
+    }*/
+    
+    if(this!= &m)
+    {
+        this->pos->x = m.pos->x;
+        this->pos->y = m.pos->y;
+        this->symbol = m.symbol;
 
+        this -> pos = new Pos;
+        
+    }
+    return *this;
+}
+
+objPos :: objPos(const objPos&m)
+{
+    pos->x = m.pos->x;
+    pos->y = m.pos->y;
+    symbol = m.symbol;
+
+    pos = new Pos;
+}
+
+objPos :: ~objPos()
+{
+    delete[] pos;
+}
 
 void objPos::setObjPos(objPos o)
 {

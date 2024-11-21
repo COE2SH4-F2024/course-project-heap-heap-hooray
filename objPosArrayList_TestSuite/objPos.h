@@ -1,5 +1,6 @@
 #ifndef OBJPOS_H
 #define OBJPOS_H
+#include <iostream>
 
 // Not really a C++ thing
 typedef struct 
@@ -14,8 +15,11 @@ class objPos
         Pos* pos;        
         char symbol;
 
-        objPos();
-        objPos(int xPos, int yPos, char sym);
+        objPos();  //default
+        objPos(int xPos, int yPos, char sym);  //specialized
+        objPos& operator=(const objPos&m);  //copy assigment 
+        objPos(const objPos&m); //copy constructor
+        ~objPos();  //destructor
         
         // Respect the rule of six / minimum four
         // [TODO] Implement the missing special member functions to meet the minimum four rule
