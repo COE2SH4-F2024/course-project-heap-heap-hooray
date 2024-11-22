@@ -12,12 +12,12 @@ using namespace std;
 
 Player *myPlayer;   // global pointer meant to instinitate a player object on the heap
 objPos boardObj;
-objPos arb1;
-objPos arb2;
-objPos arb3;
+//objPos arb1;
+//objPos arb2;
+//objPos arb3;
 
+GameMechs *myGM;
 
-bool exitFlag;
 
 void Initialize(void);
 void GetInput(void);
@@ -33,7 +33,7 @@ int main(void)
 
     Initialize();
 
-    while(exitFlag == false)  
+    while(myGM->getExitFlagStatus() == false)  
     {
         GetInput();
         RunLogic();
@@ -68,23 +68,24 @@ void Initialize(void)
 
     boardObj.setObjPos(0,0, '#');
 
-    arb1.setObjPos(1, 1, 'P');
-    arb2.setObjPos(2, 6, '!');
-    arb3.setObjPos(8, 7, '*');
+    //arb1.setObjPos(1, 1, 'P');
+    //arb2.setObjPos(2, 6, '!');
+    //arb3.setObjPos(8, 7, '*');
 
+    myGM = new GameMechs();
+    myPlayer = new Player(myGM);
     
-    myPlayer = new Player(nullptr);
-
-    exitFlag = false;
 }
 
 void GetInput(void)
 {
-   
+   char input = myGM ->getInput();
 }
 
 void RunLogic(void)
 {
+    myPlayer->updatePlayerDir();
+    myPlayer ->movePlayer();
     
 }
 
@@ -105,7 +106,9 @@ void DrawScreen(void)
             {
                 MacUILib_printf("%c", myPlayer->getPlayerPos().symbol);
 
-            } else if ( i == arb1.getObjPos().pos->y && j == arb1.getObjPos().pos->x)
+            } 
+            
+            /*else if ( i == arb1.getObjPos().pos->y && j == arb1.getObjPos().pos->x)
             {
                 MacUILib_printf("%c", arb1.getSymbol());
             }
@@ -116,7 +119,7 @@ void DrawScreen(void)
             else if ( i == arb3.getObjPos().pos->y && j == arb3.getObjPos().pos->x)
             {
                 MacUILib_printf("%c", arb3.getSymbol());
-            }
+            }*/
             else 
             {
                 MacUILib_printf(" ");
@@ -124,6 +127,8 @@ void DrawScreen(void)
         }
         MacUILib_printf("\n");
     }
+    int score = myGM->getScore();
+    MacUILib_printf("score: ", score);
 
 }
 
