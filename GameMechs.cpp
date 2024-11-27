@@ -1,5 +1,7 @@
 #include "GameMechs.h"
 #include "MacUILib.h"
+#include "Food.h"
+#include "Player.h"
 
 GameMechs::GameMechs()
 {
@@ -40,13 +42,29 @@ bool GameMechs::getLoseFlagStatus() const
     return loseFlag;
 }
     
-
-char GameMechs::getInput()
+void GameMechs::collectAsyncInput(Player *myPlayer, Food *myFood)
 {
     if (MacUILib_hasChar())
     {
         input = MacUILib_getChar();
     }
+
+    if(input == ' ')
+    {
+        setExitTrue();
+    }
+    else if (input == 'f') // 'f' triggers food regeneration
+    {
+        if (myFood != nullptr && myPlayer != nullptr) // Ensure valid pointers
+        {
+            myFood->generateFood(myPlayer->getPlayerPos());
+        }
+    }
+
+
+}
+char GameMechs::getInput()
+{
 
     return input;
 }

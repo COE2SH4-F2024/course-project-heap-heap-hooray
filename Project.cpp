@@ -1,14 +1,14 @@
 #include <iostream>
 #include "MacUILib.h"
 #include "objPos.h"
-
+#include "Food.h"
 #include "Player.h"
 
 using namespace std;
 
 #define DELAY_CONST 100000
-#define BOARD_ROWS 10
-#define BOARD_COLS 20
+//#define BOARD_ROWS 10
+//#define BOARD_COLS 20
 
 Player *myPlayer;   // global pointer meant to instinitate a player object on the heap
 objPos boardObj;
@@ -17,6 +17,7 @@ objPos boardObj;
 //objPos arb3;
 
 GameMechs *myGM;
+Food *myFood;
 
 
 void Initialize(void);
@@ -74,39 +75,55 @@ void Initialize(void)
 
     myGM = new GameMechs();
     myPlayer = new Player(myGM);
+    myFood = new Food();
+
+    myFood->generateFood(myPlayer->getPlayerPos());
     
 }
 
 void GetInput(void)
 {
-   char input = myGM ->getInput();
+    myGM->collectAsyncInput(myPlayer, myFood);
+   //char input = myGM ->getInput();
 }
 
 void RunLogic(void)
 {
     myPlayer->updatePlayerDir();
     myPlayer ->movePlayer();
-    
+    //myFood->generateFood(myPlayer->getPlayerPos());
+
+    //DEBUGGING PURPOSES, CAN DELETE LATER
 }
 
 void DrawScreen(void)
 {
     MacUILib_clearScreen(); 
 
-    objPos playerPos = myPlayer -> getPlayerPos();//this isn't actually getting used
+    objPos playerPos = myPlayer -> getPlayerPos();
+    objPos foodPos = myFood->getFoodPos();
+
+    int boardX = myGM->getBoardSizeX();
+    int boardY = myGM->getBoardSizeY();
+    //this isn't actually getting used
    // MacUILib_printf("Player [x, y, symbol] = (%d, %d, %c)\n",  playerPos.pos ->x, playerPos.pos ->y, playerPos.symbol); 
     // a bit redundant here, instead of calling getPlayerPos every time, we can use the playerPos object...honestly both work tho
-    for (int i = 0; i < BOARD_ROWS; i++) {
-        for (int j = 0; j < BOARD_COLS; j++) {
-            if (i == 0 || i == BOARD_ROWS - 1 || j == 0 || j == BOARD_COLS - 1) 
+
+    for (int i = 0; i < boardY; i++) {
+        for (int j = 0; j < boardX; j++) {
+            if (i == 0 || i == boardY - 1 || j == 0 || j == boardX - 1) 
             {
                 MacUILib_printf("%c", boardObj.symbol);
 
-            } else if (i == myPlayer->getPlayerPos().pos->y && j == myPlayer->getPlayerPos().pos->x) 
+            } else if (i == playerPos.pos->y && j == playerPos.pos->x) 
             {
-                MacUILib_printf("%c", myPlayer->getPlayerPos().symbol);
+                MacUILib_printf("%c", playerPos.symbol);
 
-            } 
+            }
+            else if(i == foodPos.pos->y && j == foodPos.pos->x)
+            {
+                MacUILib_printf("%c", foodPos.symbol);
+            }
             
             /*else if ( i == arb1.getObjPos().pos->y && j == arb1.getObjPos().pos->x)
             {
@@ -143,6 +160,7 @@ void CleanUp(void)
     MacUILib_clearScreen();    
 
     delete myPlayer;
+    delete myFood;
 
     MacUILib_uninit();
 
