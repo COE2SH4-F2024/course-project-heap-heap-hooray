@@ -1,9 +1,11 @@
 #include <iostream>
 #include "MacUILib.h"
 #include "objPos.h"
+#include "GameMechs.h"
 #include "Food.h"
 
 #include "Player.h"
+#include "Food.h"
 
 using namespace std;
 
@@ -84,6 +86,8 @@ void Initialize(void)
 
 void GetInput(void)
 {
+   char input = myGM ->getInput();
+   myGM->collectAsynchInput(myPlayer, myFood);
     myGM->collectAsynchInput(myPlayer, myFood);
 
    //char input = myGM ->getInput();
