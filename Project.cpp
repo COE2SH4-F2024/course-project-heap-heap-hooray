@@ -1,8 +1,9 @@
 #include <iostream>
 #include "MacUILib.h"
 #include "objPos.h"
-
+#include "GameMechs.h"
 #include "Player.h"
+#include "Food.h"
 
 using namespace std;
 
@@ -17,6 +18,7 @@ objPos boardObj;
 //objPos arb3;
 
 GameMechs *myGM;
+Food *myFood;   //I added this to fix the collectAsynchInput function, I hope its right:)
 
 
 void Initialize(void);
@@ -80,7 +82,7 @@ void Initialize(void)
 void GetInput(void)
 {
    char input = myGM ->getInput();
-   myGM->collectAsynchInput();
+   myGM->collectAsynchInput(myPlayer, myFood);
 }
 
 void RunLogic(void)

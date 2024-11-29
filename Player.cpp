@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "GameMechs.h"  
 
 
 Player::Player(GameMechs* thisGMRef)
@@ -130,7 +131,7 @@ void Player::movePlayer()
 
 // More methods to be added
 
-/*Dir Player:: getDirection() const  //i thought i needed this sorry babes
+/*Dir Player:: getDirection() const  //i thought i needed this sorry babes   <3
     {
         return direction;
     }*/ 
