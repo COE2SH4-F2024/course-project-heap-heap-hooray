@@ -7,6 +7,12 @@
 #include "objPos.h"
 #include "objPosArrayList.h"
 
+//#include "Food.h"
+//#include "Player.h"
+
+class Player;
+class Food;
+
 using namespace std;
 
 class GameMechs
@@ -43,7 +49,7 @@ class GameMechs
         void incrementScore();
         
         // More methods should be added here
-        void collectAsynchInput();
+        void collectAsynchInput(Player *myPlayer, Food *myFood);
 };
 
 #endif

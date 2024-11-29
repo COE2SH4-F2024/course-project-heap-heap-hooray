@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "GameMechs.h"
 
 
 Player::Player(GameMechs* thisGMRef)

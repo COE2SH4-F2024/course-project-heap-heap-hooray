@@ -42,7 +42,7 @@ bool GameMechs::getLoseFlagStatus() const
     return loseFlag;
 }
     
-void GameMechs::collectAsyncInput(Player *myPlayer, Food *myFood)
+void GameMechs::collectAsynchInput(Player *myPlayer, Food *myFood)
 {
     if (MacUILib_hasChar())
     {
