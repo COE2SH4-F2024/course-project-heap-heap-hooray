@@ -105,24 +105,40 @@ void DrawScreen(void)
 {
     MacUILib_clearScreen(); 
 
-    objPos playerPos = myPlayer -> getPlayerPos();
+    objPosArrayList* playerPos = myPlayer -> getPlayerPos();
+    int playerSize = playerPos->getSize();//use to know how many elements are in the list, therefore how many need to be iterated through
     objPos foodPos = myFood->getFoodPos();
-
     int boardX = myGM->getBoardSizeX();
     int boardY = myGM->getBoardSizeY();
     //this isn't actually getting used
 
     for (int i = 0; i < boardY; i++) {
         for (int j = 0; j < boardX; j++) {
+            //we now need to iterate thoguth the playerPos array list to print all the segments out
+            for(int k = 0; k < playerSize; k++)
+            {
+                objPos thisSeg = playerPos->getElement(k);
+                //check if the current segment x,y position matches the i,j coordinate 
+                //if yes, print the symbol
+
+                //we need to skip the if-else block below if we have printed something in the for loop
+                //use key word continue and boolean flag to see if remaining if-else should be skipped or not
+            }
+
+            //at the end of the for loop, do something to determine whether to continue with the if-else or
+            //move on to the next iteration of i,j
+           
             if (i == 0 || i == boardY - 1 || j == 0 || j == boardX - 1) 
             {
                 MacUILib_printf("%c", boardObj.symbol);
 
-            } else if (i == playerPos.pos->y && j == playerPos.pos->x) 
-            {
-                MacUILib_printf("%c", playerPos.symbol);
-
             } 
+            //this section is replaced by for loop above
+            // else if (i == playerPos.pos->y && j == playerPos.pos->x) 
+            // {
+            //     MacUILib_printf("%c", playerPos.symbol);
+
+            // } 
             else if( i == myFood->y && j == myFood->x)
             {
                 MacUILib_printf("%c", foodPos.symbol);

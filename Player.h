@@ -1,7 +1,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-//#include "GameMechs.h"
+#include "GameMechs.h"
 #include "objPos.h"
 #include "objPosArrayList.h"
 
@@ -22,7 +22,7 @@ class Player
         Player(GameMechs* thisGMRef);//constructor
         ~Player();//destructor
 
-        objPos getPlayerPos() const; // Upgrade this in iteration 3.       
+        objPosArrayList* getPlayerPos() const; // Upgrade this in iteration 3.       
         void updatePlayerDir();
         Dir getDirection() const;   //um i added this for now cus idk how to get direction
         void movePlayer();
@@ -30,7 +30,8 @@ class Player
         // More methods to be added here
 
     private:
-        objPos playerPos; // Upgrade this in iteration 3.       
+        //objPos playerPos; // Upgrade this in iteration 3.
+        objPosArrayList* playerPosList;       
         enum Dir direction;
 
         // Need a reference to the Main Game Mechanisms
