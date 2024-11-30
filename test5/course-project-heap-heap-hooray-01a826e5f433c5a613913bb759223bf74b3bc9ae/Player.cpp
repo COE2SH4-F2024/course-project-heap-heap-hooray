@@ -1,6 +1,5 @@
 #include "Player.h"
 #include "GameMechs.h"  
-#include "objPos.h"
 
 
 Player::Player(GameMechs* thisGMRef)
@@ -9,8 +8,17 @@ Player::Player(GameMechs* thisGMRef)
     playerPosList = new objPosArrayList();
     direction = stop;
 
-    objPos headPos(mainGameMechsRef->getBoardSizeX()/2,mainGameMechsRef->getBoardSizeY()/2,'@');
+    objPos headPos(mainGameMechsRef->getBoardSizeX()/2, mainGameMechsRef->getBoardSizeY()/2, '@');
+
     playerPosList->insertHead(headPos);
+
+    //following is just for test
+    objPos test1(headPos.pos->x-1, headPos.pos->y-1, '@');
+    playerPosList->insertTail(test1);
+
+    objPos test2(headPos.pos->x-2, headPos.pos->y-2, '@');
+    playerPosList->insertTail(test2);
+
     // more actions to be included
 
     // playerPos.pos->x = mainGameMechsRef->getBoardSizeX()/2;
@@ -96,63 +104,89 @@ void Player::updatePlayerDir()
 void Player::movePlayer()
 {
     // PPA3 Finite State Machine logic
-    //Iteration 3: create a temporary objPos to calculate the new head position
-    //probably should get the head element of the playerPosList as a starting point
-    objPos temp;
-    temp = playerPosList->getHeadElement();//temp holds the element at the head of the snake...should this be the 
+    // create a temporary objPos to calculate tthe new head position
+    // probably should get the head element of the playerPosList 
+    // good astarting point
+
+    objPos temp = playerPosList->getHeadElement();
 
     switch(direction)
         {
-            //calculate new position of the head using the temp objPos
+            // calculate the new position of the head
+            // using the temp objPos
             case up:
-                //playerPos.pos->y--;
-                temp.pos->y--;  //is this legal??
+                temp.pos->y--;
                 break;
 
             case right:
-                //playerPos.pos->x++;
                 temp.pos->x++;
                 break;
 
             case left:
-                //playerPos.pos->x--;
                 temp.pos->x--;
                 break;
 
             case down:
-                //playerPos.pos->y++;
                 temp.pos->y++;
                 break;
         }
-        //insert temp objPos to the head of the list
+
+        if(temp.pos->x < 1)
+        {
+            temp.pos->x = mainGameMechsRef->getBoardSizeX() - 2;
+        }
+        else if(temp.pos->x > mainGameMechsRef->getBoardSizeX() -2)
+        {
+            temp.pos->x = 1;
+        }
+        
+        if(temp.pos->y < 1)
+        {
+            temp.pos->y = mainGameMechsRef->getBoardSizeY() - 2;
+        }
+        else if(temp.pos->y > mainGameMechsRef->getBoardSizeY() -2)
+        {
+            temp.pos->y = 1;
+        }
+
+        // insert temp objPos to the head of the list
+
         playerPosList->insertHead(temp);
-        //***check if the new temp objPos overlaps with food pos (get from GameMechs class)
-        //if(temp.isPosEqual()) //Ahhh helppp
+        playerPosList->removeTail();
+
+        // FEATURE TWO: CHECK IF THE NEW TEMP OBJPOS OVERLAPS THE FOOD POS (GET IT FROM THE GAMEMECHS CLASS)
+        // FEATURE TWO: USE ISPOSEQUAL() METHOD FROM OBJPOS CLASS
+        // FEATURE TWO: IF OVERLAPP, FOOD CONSUMED, DO NOT REMOVE SNAKE TAIL
+        // TAKE THE RESPECTIVE ACTIONS TO INCREASE THE STORE
+        // IF NO OVERLAP REMOVE TAIL, COMPLETE MOVEMENT
+
+        // if(playerPosList->getHeadElement().pos->x < 1)
+        // {
+        //     // playerPosList->removeHead();
+        //     // playerPosList->insertHead(position)
+
+        //     // for(int i = 0; i < playerPosList->getSize(); i++)
+        //     // {
+        //     //     objPos elem = playerPosList->getElement(i);
+        //     //     elem.pos->x = mainGameMechsRef->getBoardSizeX() - 2;
+        //     // }
+        // }
+
+
+    //     if (temp.pos->x < 0) {
+    //     temp.pos->x = mainGameMechsRef->getBoardSizeX() - 1;
+    // } else if (temp.pos->x >= mainGameMechsRef->getBoardSizeX()) {
+    //     temp.pos->x = 0;
+    // }
+
+    // if (temp.pos->y < 0) {
+    //     temp.pos->y = mainGameMechsRef->getBoardSizeY() - 1;
+    // } else if (temp.pos->y >= mainGameMechsRef->getBoardSizeY()) {
+    //     temp.pos->y = 0;
+    // }
+
         
-        //use isPosEqual method from objPos class to check overlap
-        //if overlapped, food consumed, do not remove snake tail, increase the score
 
-        //if no overlap, remove tail, complete movement.
-
-
-        //Chen doesn't have this block in his tutorial vid, is this the wraparound logic?
-        /*if(playerPos.pos->x < 1)
-        {
-            playerPos.pos->x = mainGameMechsRef->getBoardSizeX() - 2;
-        }
-        else if(playerPos.pos->x > mainGameMechsRef->getBoardSizeX() -1)
-        {
-            playerPos.pos->x = 1;
-        }
-        
-        if(playerPos.pos->y < 1)
-        {
-            playerPos.pos->y = mainGameMechsRef->getBoardSizeY() - 2;
-        }
-        else if(playerPos.pos->y > mainGameMechsRef->getBoardSizeY() -1)
-        {
-            playerPos.pos->y = 1;
-        }*/
 }
 
 // More methods to be added

@@ -3,7 +3,6 @@
 #include "objPos.h"
 #include "GameMechs.h"
 #include "Food.h"
-#include "objPosArrayList.h"
 
 #include "Player.h"
 #include "Food.h"
@@ -22,7 +21,6 @@ objPos boardObj;
 
 GameMechs *myGM;
 Food *myFood;
-objPosArrayList* playerPos;
 
 
 void Initialize(void);
@@ -81,22 +79,15 @@ void Initialize(void)
     myGM = new GameMechs();
     myPlayer = new Player(myGM);
     myFood = new Food();
-    //playerPos = myPlayer;
 
-    //myFood->generateFood(myPlayer->getPlayerPos());
-    /*for(int i =0; i < playerPos->getSize(); i++)
-    {
-        myFood->generateFood(playerPos->getElement(i).getObjPos());
-    }*/
-    
-    //myFood->generateFood(myPlayer->getPlayerPos());
+    myFood->generateFood(myPlayer->getPlayerPos());
 
 }
 
 void GetInput(void)
 {
    char input = myGM ->getInput();
-   //myGM->collectAsynchInput(myPlayer, myFood);
+   myGM->collectAsynchInput(myPlayer, myFood);
     myGM->collectAsynchInput(myPlayer, myFood);
 
    //char input = myGM ->getInput();
@@ -115,39 +106,50 @@ void DrawScreen(void)
     MacUILib_clearScreen(); 
 
     objPosArrayList* playerPos = myPlayer -> getPlayerPos();
-    int playerSize = playerPos->getSize();//use to know how many elements are in the list, therefore how many need to be iterated through
+    int playerSize = playerPos->getSize();
+
     objPos foodPos = myFood->getFoodPos();
+
     int boardX = myGM->getBoardSizeX();
     int boardY = myGM->getBoardSizeY();
-    //this isn't actually getting used
 
     for (int i = 0; i < boardY; i++) {
         for (int j = 0; j < boardX; j++) {
-            //we now need to iterate thoguth the playerPos array list to print all the segments out
+            // we now need to iterate through the playerPos array list to print all the segments out
+            bool printed = false;
             for(int k = 0; k < playerSize; k++)
             {
                 objPos thisSeg = playerPos->getElement(k);
-                //check if the current segment x,y position matches the i,j coordinate 
-                //if yes, print the symbol
 
-                //we need to skip the if-else block below if we have printed something in the for loop
-                //use key word continue and boolean flag to see if remaining if-else should be skipped or not
+                if(thisSeg.pos->x == j && thisSeg.pos->y == i)
+                {
+                    MacUILib_printf("%c", thisSeg.symbol);
+                    printed = true;
+                    break;
+                }
+
+                // check if the current segment x,y pos matches the (j, i) coordinate
+                // if yes, print the symbol
+
+                // watch out, we need to skip the id-else block below if we have printed something
+                // i.e. use continue
             }
 
-            //at the end of the for loop, do something to determine whether to continue with the if-else or
-            //move on to the next iteration of i,j
-           
+            // at the end of the for loop, do something to determine whether to contune with the if-else or move on to the next iteration of (i-j)
+            if(printed)
+            {
+                continue;
+            }
+
             if (i == 0 || i == boardY - 1 || j == 0 || j == boardX - 1) 
             {
                 MacUILib_printf("%c", boardObj.symbol);
 
-            } 
-            //this section is replaced by for loop above
-            // else if (i == playerPos.pos->y && j == playerPos.pos->x) 
+            // } else if (i == playerPos.pos->y && j == playerPos.pos->x) 
             // {
             //     MacUILib_printf("%c", playerPos.symbol);
 
-            // } 
+            } 
             else if( i == myFood->y && j == myFood->x)
             {
                 MacUILib_printf("%c", foodPos.symbol);
@@ -186,9 +188,20 @@ void LoopDelay(void)
 void CleanUp(void)
 {
     MacUILib_clearScreen();    
+    if(myGM->getLoseFlagStatus() == true)
+    {
+        MacUILib_printf("you lose!");
+    }
+    else
+    {
+        MacUILib_printf("terminated successfully");
+    }
 
+
+    delete myGM;
     delete myPlayer;
     delete myFood;
+    
 
     MacUILib_uninit();
 
