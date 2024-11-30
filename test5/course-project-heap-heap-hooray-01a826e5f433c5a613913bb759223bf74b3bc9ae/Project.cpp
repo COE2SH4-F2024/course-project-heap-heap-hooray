@@ -77,8 +77,9 @@ void Initialize(void)
     //arb3.setObjPos(8, 7, '*');
 
     myGM = new GameMechs();
-    myPlayer = new Player(myGM);
     myFood = new Food();
+
+    myPlayer = new Player(myGM, myFood);
 
     myFood->generateFood(myPlayer->getPlayerPos());
 
@@ -175,7 +176,7 @@ void DrawScreen(void)
         MacUILib_printf("\n");
     }
     int score = myGM->getScore();
-    MacUILib_printf("score: ", score);
+    MacUILib_printf("score: %d", score);
 
 }
 

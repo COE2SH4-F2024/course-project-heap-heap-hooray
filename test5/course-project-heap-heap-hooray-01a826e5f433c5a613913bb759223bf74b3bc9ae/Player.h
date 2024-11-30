@@ -4,6 +4,7 @@
 //#include "GameMechs.h"
 #include "objPos.h"
 #include "objPosArrayList.h"
+#include "Food.h"
 
 class GameMechs;
 
@@ -19,13 +20,15 @@ class Player
     public:
         enum Dir {up, down, left, right, stop};  // This is the direction state
 
-        Player(GameMechs* thisGMRef);//constructor
+        Player(GameMechs* thisGMRef, Food* thisFood);//constructor
         ~Player();//destructor
 
         objPosArrayList* getPlayerPos() const; // Upgrade this in iteration 3.       
         void updatePlayerDir();
         Dir getDirection() const;   //um i added this for now cus idk how to get direction
         void movePlayer();
+        bool checkSelfCollision(int index);
+        bool checkFoodCollision();
 
         // More methods to be added here
 
@@ -36,6 +39,7 @@ class Player
 
         // Need a reference to the Main Game Mechanisms
         GameMechs* mainGameMechsRef;
+        Food* thatFood;
 };
 
 #endif

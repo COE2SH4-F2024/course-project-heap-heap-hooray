@@ -2,9 +2,11 @@
 #include "GameMechs.h"  
 
 
-Player::Player(GameMechs* thisGMRef)
+Player::Player(GameMechs* thisGMRef, Food* thisFood)
 {
     mainGameMechsRef = thisGMRef;
+    thatFood = thisFood;
+
     playerPosList = new objPosArrayList();
     direction = stop;
 
@@ -13,11 +15,11 @@ Player::Player(GameMechs* thisGMRef)
     playerPosList->insertHead(headPos);
 
     //following is just for test
-    objPos test1(headPos.pos->x-1, headPos.pos->y-1, '@');
-    playerPosList->insertTail(test1);
+    // objPos test1(headPos.pos->x-1, headPos.pos->y-1, '@');
+    // playerPosList->insertTail(test1);
 
-    objPos test2(headPos.pos->x-2, headPos.pos->y-2, '@');
-    playerPosList->insertTail(test2);
+    // objPos test2(headPos.pos->x-2, headPos.pos->y-2, '@');
+    // playerPosList->insertTail(test2);
 
     // more actions to be included
 
@@ -149,16 +151,57 @@ void Player::movePlayer()
             temp.pos->y = 1;
         }
 
-        // insert temp objPos to the head of the list
+        //checkSelfCollision(temp);
 
-        playerPosList->insertHead(temp);
-        playerPosList->removeTail();
+        objPos foo = thatFood->getFoodPos();
+
+        //checkFoodCollision(temp, foo);
+        for(int n = 1; n < playerPosList->getSize(); n++)
+        {
+            if(playerPosList->getSize()>1)
+            {
+                if(checkSelfCollision(n))
+                {
+                    mainGameMechsRef->setLoseFlag();
+                    mainGameMechsRef->setExitTrue();
+                }
+    
+            // for(int i = 0; i < playerPosList->getSize(); i++)
+            // {
+            //     objPos element = playerPosList->getElement(i);
+            //     if(temp.isPosEqual(&element))
+            //     {
+            //         mainGameMechsRef->setLoseFlag();
+            //         mainGameMechsRef->setExitTrue();
+            //     }
+            //     else{
+            //         continue;
+            //         }
+            // }
+            }
+
+        }
+        
+        // insert temp objPos to the head of the list
 
         // FEATURE TWO: CHECK IF THE NEW TEMP OBJPOS OVERLAPS THE FOOD POS (GET IT FROM THE GAMEMECHS CLASS)
         // FEATURE TWO: USE ISPOSEQUAL() METHOD FROM OBJPOS CLASS
         // FEATURE TWO: IF OVERLAPP, FOOD CONSUMED, DO NOT REMOVE SNAKE TAIL
         // TAKE THE RESPECTIVE ACTIONS TO INCREASE THE STORE
         // IF NO OVERLAP REMOVE TAIL, COMPLETE MOVEMENT
+    
+
+        if(checkFoodCollision())
+        {
+            playerPosList->insertHead(temp);
+            thatFood->generateFood(playerPosList);
+            mainGameMechsRef->incrementScore();
+        }
+        else
+        {
+            playerPosList->insertHead(temp);
+            playerPosList->removeTail();
+        }
 
         // if(playerPosList->getHeadElement().pos->x < 1)
         // {
@@ -190,6 +233,50 @@ void Player::movePlayer()
 }
 
 // More methods to be added
+
+bool Player::checkFoodCollision()
+{
+    objPos temp = playerPosList->getHeadElement();
+    objPos foo = thatFood->getFoodPos();
+
+    bool truth = temp.isPosEqual(&foo);
+    return truth;
+
+        // if(temp.isPosEqual(&food))
+        // {
+        //     playerPosList->insertHead(temp);
+        //     thatFood->generateFood(playerPosList);
+        //     mainGameMechsRef->incrementScore();
+        // }
+        // else
+        // {
+        //     playerPosList->insertHead(temp);
+        //     playerPosList->removeTail();
+        // }
+}
+
+bool Player::checkSelfCollision(int index)
+{
+    objPos temp = playerPosList->getHeadElement();
+
+    
+    
+            
+                objPos element = playerPosList->getElement(index);
+                bool truth = temp.isPosEqual(&element);
+
+                // if(temp.isPosEqual(&element))
+                // {
+                //     mainGameMechsRef->setLoseFlag();
+                //     mainGameMechsRef->setExitTrue();
+                // }
+                // else{
+                //     continue;
+                //     }
+                return truth;
+            
+
+}
 
 /*Dir Player:: getDirection() const  //i thought i needed this sorry babes   <3
     {
