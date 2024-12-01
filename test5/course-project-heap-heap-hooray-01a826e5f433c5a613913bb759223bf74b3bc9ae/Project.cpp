@@ -41,7 +41,7 @@ int main(void)
     {
         GetInput();
         RunLogic();
-        DrawScreen();
+        //DrawScreen();
         LoopDelay();
     }
 
@@ -109,7 +109,10 @@ void DrawScreen(void)
     objPosArrayList* playerPos = myPlayer -> getPlayerPos();
     int playerSize = playerPos->getSize();
 
-    objPos foodPos = myFood->getFoodPos();
+    objPosArrayList* foodPos = myFood->getFoodPos();
+    int foodSize = foodPos->getSize();
+
+    //objPos foodPos = myFood->getFoodPos();
 
     int boardX = myGM->getBoardSizeX();
     int boardY = myGM->getBoardSizeY();
@@ -135,6 +138,17 @@ void DrawScreen(void)
                 // watch out, we need to skip the id-else block below if we have printed something
                 // i.e. use continue
             }
+            for(int m = 0; m < foodSize; m++ )
+            {
+                objPos thisFood = foodPos->getElement(m);
+
+                if(thisFood.pos->x == j && thisFood.pos->y == i)
+                {
+                    MacUILib_printf("%c", thisFood.symbol);
+                    printed = true;
+                    break;
+                }
+            }
 
             // at the end of the for loop, do something to determine whether to contune with the if-else or move on to the next iteration of (i-j)
             if(printed)
@@ -151,10 +165,10 @@ void DrawScreen(void)
             //     MacUILib_printf("%c", playerPos.symbol);
 
             } 
-            else if( i == myFood->y && j == myFood->x)
-            {
-                MacUILib_printf("%c", foodPos.symbol);
-            }
+            // else if( i == myFood->y && j == myFood->x)
+            // {
+            //     MacUILib_printf("%c", foodPos.symbol);
+            // }
             
             /*else if ( i == arb1.getObjPos().pos->y && j == arb1.getObjPos().pos->x)
             {
@@ -200,8 +214,11 @@ void CleanUp(void)
 
 
     delete myGM;
+    myGM = nullptr;
     delete myPlayer;
+    myPlayer = nullptr;
     delete myFood;
+    myFood = nullptr;
     
 
     MacUILib_uninit();

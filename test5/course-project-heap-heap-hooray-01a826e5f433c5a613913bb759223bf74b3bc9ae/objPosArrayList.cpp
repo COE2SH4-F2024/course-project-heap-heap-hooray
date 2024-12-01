@@ -11,9 +11,74 @@ objPosArrayList::objPosArrayList()
     
 }
 
+objPosArrayList::objPosArrayList(int size)
+{
+    listSize = size;
+    arrayCapacity = ARRAY_MAX_CAP; 
+    aList = new objPos[size];
+    // for(int i = 0; i < size; i++)
+    // {
+    //     aList[i] = new objPos();
+    // }
+}
+
+objPosArrayList::objPosArrayList(const objPosArrayList& other)
+    : listSize(other.listSize), arrayCapacity(other.arrayCapacity)
+{
+    aList = new objPos[arrayCapacity];  // Allocate new array
+    for (int i = 0; i < listSize; ++i) {
+        aList[i] = other.aList[i];  // Deep copy each element
+    }
+}
+
+objPosArrayList& objPosArrayList::operator=(const objPosArrayList& other)
+{
+    if (this != &other) {  // Protect against self-assignment
+        delete[] aList;  // Delete existing array
+        aList = nullptr;
+
+        arrayCapacity = other.arrayCapacity;
+        listSize = other.listSize;
+        aList = new objPos[arrayCapacity];  // Allocate new memory
+
+        for (int i = 0; i < listSize; ++i) {
+            aList[i] = other.aList[i];  // Deep copy elements
+        }
+    }
+    return *this;
+}
+
+
+// objPosArrayList::objPosArrayList(const objPosArrayList& other)
+//     : listSize(other.listSize), arrayCapacity(other.arrayCapacity) {
+//     aList = new objPos[arrayCapacity];
+//     for (int i = 0; i < listSize; i++) {
+//         aList[i] = other.aList[i]; // This calls objPos's copy constructor
+//     }
+// }
+
+// objPosArrayList& objPosArrayList::operator=(const objPosArrayList& other) {
+//     if (this != &other) {
+//         delete[] aList;
+//         listSize = other.listSize;
+//         arrayCapacity = other.arrayCapacity;
+//         aList = new objPos[arrayCapacity];
+//         for (int i = 0; i < listSize; i++) {
+//             aList[i] = other.aList[i]; // Calls objPos's copy constructor
+//         }
+//     }
+//     return *this;
+// }
+
+
 objPosArrayList::~objPosArrayList()
 {
-    delete[] aList;
+    for (int i = 0; i < listSize; ++i) {
+        aList[i].~objPos();  // Call destructor for each objPos
+    }
+    delete[] aList; 
+    aList = nullptr;
+    //delete[] aList;
 }
 
 int objPosArrayList::getSize() const

@@ -6,6 +6,8 @@
 #include "objPosArrayList.h"
 #include "Food.h"
 
+class Food;
+
 class GameMechs;
 
 class Player
@@ -28,7 +30,7 @@ class Player
         Dir getDirection() const;   //um i added this for now cus idk how to get direction
         void movePlayer();
         bool checkSelfCollision(int index);
-        bool checkFoodCollision();
+        int checkFoodCollision();
 
         // More methods to be added here
 

@@ -38,6 +38,11 @@ Player::~Player()
     // no keyword new in the constructor
     // leave the destructor empty FOR NOW
     delete playerPosList;
+    playerPosList = nullptr;
+    // delete mainGameMechsRef;  // If Player owns these objects
+    // mainGameMechsRef = nullptr;
+    // delete thatFood;
+    // thatFood = nullptr;
 }
 
 /*void Player::getPlayerPos(objPos &returnPos) const
@@ -95,9 +100,9 @@ void Player::updatePlayerDir()
                     //startCount = 1;
                 }
                 break;
-            case 'M':   //THIS IS A DEBUGGING THING THEY WANTED US TO DO
-                mainGameMechsRef->incrementScore();
-                break;
+            // case 'M':   //THIS IS A DEBUGGING THING THEY WANTED US TO DO
+            //     mainGameMechsRef->incrementScore();
+            //     break;
         }  
 
         mainGameMechsRef->clearInput();  
@@ -150,12 +155,11 @@ void Player::movePlayer()
         {
             temp.pos->y = 1;
         }
-
-        //checkSelfCollision(temp);
-
-        objPos foo = thatFood->getFoodPos();
+ 
 
         //checkFoodCollision(temp, foo);
+
+    
         for(int n = 1; n < playerPosList->getSize(); n++)
         {
             if(playerPosList->getSize()>1)
@@ -181,6 +185,70 @@ void Player::movePlayer()
             }
 
         }
+
+        thatFood->generateFood(playerPosList);
+
+            if(checkFoodCollision() == 1)
+            {
+                playerPosList->insertHead(temp);
+                thatFood->generateFood(playerPosList);
+                mainGameMechsRef->incrementScore(50);
+
+            }
+            else if(checkFoodCollision() == 2)
+            {
+                playerPosList->insertHead(temp);
+                thatFood->generateFood(playerPosList);
+                mainGameMechsRef->incrementScore(25);
+            }
+            else if(checkFoodCollision() == 3)
+            {
+                playerPosList->insertHead(temp);
+                thatFood->generateFood(playerPosList);
+                mainGameMechsRef->incrementScore(1);
+            }
+            else
+            {
+            playerPosList->insertHead(temp);
+            playerPosList->removeTail();
+            }
+        
+        printf("size: %d\n", playerPosList->getSize());
+        for(int i = 0; i < thatFood->getFoodPos()->getSize(); i++)
+        {
+            printf("(x,y) = %d, %d\n", thatFood->getFoodPos()->getElement(i).pos->x, thatFood->getFoodPos()->getElement(i).pos->y);
+        }
+        printf("score: %d\n", mainGameMechsRef->getScore());
+
+        // for(int j = 0; j < thatFood->getFoodPos()->getSize(); j++)
+        // {
+        //     objPos foo = thatFood->getFoodPos()->getElement(j);
+        //     if(checkFoodCollision() == 1)
+        //     {
+        //         playerPosList->insertHead(temp);
+        //         thatFood->generateFood(playerPosList);
+        //         mainGameMechsRef->incrementScore(50);
+
+        //     }
+        //     else if(checkFoodCollision() == 2)
+        //     {
+        //         playerPosList->insertHead(temp);
+        //         thatFood->generateFood(playerPosList);
+        //         mainGameMechsRef->incrementScore(25);
+        //     }
+        //     else if(checkFoodCollision() == 3)
+        //     {
+        //         playerPosList->insertHead(temp);
+        //         thatFood->generateFood(playerPosList);
+        //         mainGameMechsRef->incrementScore(1);
+        //     }
+        //     else
+        //     {
+        //     playerPosList->insertHead(temp);
+        //     playerPosList->removeTail();
+        //     }
+            
+        // } 
         
         // insert temp objPos to the head of the list
 
@@ -190,18 +258,38 @@ void Player::movePlayer()
         // TAKE THE RESPECTIVE ACTIONS TO INCREASE THE STORE
         // IF NO OVERLAP REMOVE TAIL, COMPLETE MOVEMENT
     
+        // for(int j = 0; j < thatFood->foodBucket->getSize(); j++)
+        // {
+        //     objPos foo = thatFood->getFoodPos()->getElement(j);
+        //     if(checkFoodCollision() == 1)
+        //     {
+        //         playerPosList->insertHead(temp);
+        //         thatFood->generateFood(playerPosList);
+        //         mainGameMechsRef->incrementScore(50);
 
-        if(checkFoodCollision())
-        {
-            playerPosList->insertHead(temp);
-            thatFood->generateFood(playerPosList);
-            mainGameMechsRef->incrementScore();
-        }
-        else
-        {
-            playerPosList->insertHead(temp);
-            playerPosList->removeTail();
-        }
+        //     }
+        //     else if(checkFoodCollision() == 2)
+        //     {
+        //         playerPosList->insertHead(temp);
+        //         thatFood->generateFood(playerPosList);
+        //         mainGameMechsRef->incrementScore(25);
+        //     }
+        //     else if(checkFoodCollision() == 3)
+        //     {
+        //         playerPosList->insertHead(temp);
+        //         thatFood->generateFood(playerPosList);
+        //         mainGameMechsRef->incrementScore(1);
+        //     }
+        //     else
+        //     {
+        //     playerPosList->insertHead(temp);
+        //     playerPosList->removeTail();
+        //     }
+            
+        // }   
+        
+
+        
 
         // if(playerPosList->getHeadElement().pos->x < 1)
         // {
@@ -234,13 +322,56 @@ void Player::movePlayer()
 
 // More methods to be added
 
-bool Player::checkFoodCollision()
+int Player::checkFoodCollision()
 {
-    objPos temp = playerPosList->getHeadElement();
-    objPos foo = thatFood->getFoodPos();
+    if (!thatFood->getFoodPos() || thatFood->getFoodPos()->getSize() == 0) {
+    return 0; // No collision
+    }
 
-    bool truth = temp.isPosEqual(&foo);
-    return truth;
+    objPos temp = playerPosList->getHeadElement();
+
+    for(int i = 0; i < thatFood->getFoodPos()->getSize(); i++)
+    {
+        objPos foo = thatFood->getFoodPos()->getElement(i);
+
+        //bool truth = 0;
+        
+        //truth = temp.isPosEqual(&foo);
+
+        if(temp.isPosEqual(&foo))
+        {
+            char foodType = foo.getSymbol();
+
+            switch(foodType)
+            {
+                case '?':
+                    return 2; 
+                case '$':
+                    return 1;
+                case 'o':
+                    return 3;
+            }
+            // if(foodType == '?')
+            // {
+            //     printf("2\n");
+            //     return 2;
+            // }
+            // else if(foodType == '$')
+            // {
+            //     printf("1\n");
+            //     return 1;
+            // }
+            // else if(foodType == 'o')
+            // {
+            //     printf("3\n");
+            //     return 3;
+            // }
+        }
+    }
+    return 0;
+    //objPos foo = thatFood->getFoodPos();
+
+    //return truth;
 
         // if(temp.isPosEqual(&food))
         // {
@@ -257,6 +388,7 @@ bool Player::checkFoodCollision()
 
 bool Player::checkSelfCollision(int index)
 {
+    
     objPos temp = playerPosList->getHeadElement();
 
     

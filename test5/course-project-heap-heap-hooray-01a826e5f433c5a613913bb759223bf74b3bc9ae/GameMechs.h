@@ -48,7 +48,7 @@ class GameMechs
         int getBoardSizeY() const;
         
         int getScore() const;
-        void incrementScore();
+        void incrementScore(int repeat);
         
         // More methods should be added here
         void collectAsynchInput(Player *myPlayer, Food *myFood);
