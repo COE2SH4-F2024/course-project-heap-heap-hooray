@@ -53,18 +53,7 @@ void GameMechs::collectAsynchInput(Player *myPlayer, Food *myFood)
     {
         setExitTrue();
     }
-    else if (input == 'f') // 'f' triggers food regeneration
-    {
-        if (myFood != nullptr && myPlayer != nullptr) // Ensure valid pointers
-        {
-            //myFood->generateFood(myPlayer->getPlayerPos());
-            //myFood->generateFood(myPlayer->getPlayerPos()->getHeadElement());
-            objPos headPos = myPlayer->getPlayerPos()->getHeadElement();
-
-            myFood->generateFood(headPos);
-
-        }
-    }
+   
 
 
 }
@@ -115,4 +104,3 @@ void GameMechs::clearInput()
     input = 0;
 }
 
-// More methods should be added here

@@ -7,10 +7,6 @@
 #include "objPos.h"
 #include "objPosArrayList.h"
 #include "Food.h"
-#include "Player.h"
-
-//#include "Food.h"
-//#include "Player.h"
 
 class Player;
 class Food;

@@ -18,10 +18,9 @@ Food::~Food()
     // nothing for now
 }
 
-void Food::generateFood(objPos blockOff)
+void Food::generateFood(objPosArrayList* blockOff)
 {
-    // you only need to block off the player position for now
-    // easier for now, upgrade this in iteration 3
+    // make sure that the food is not generated at the same position of ANY part of the array list
 
     srand(time(NULL));
     do
@@ -30,10 +29,15 @@ void Food::generateFood(objPos blockOff)
         y = rand()% (yRange-2)+1;
 
         posocc = 0;
-
-        if(blockOff.pos->x == x && blockOff.pos->y)
+        for(int i = 0; i < blockOff->getSize(); i++)
         {
-            posocc = 1;
+            objPos list = blockOff->getElement(i);
+
+            if(list.pos->x == x && list.pos->y)
+            {
+                posocc = 1;
+            }
+
         }
 
     } while (posocc);
@@ -41,7 +45,7 @@ void Food::generateFood(objPos blockOff)
     foodPos.pos->x = x;
     foodPos.pos->y = y;
     
-    
+
 }
 
 objPos Food::getFoodPos() const

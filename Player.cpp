@@ -1,40 +1,27 @@
 #include "Player.h"
 #include "GameMechs.h"  
-#include "objPos.h"
 
 
-Player::Player(GameMechs* thisGMRef)
+Player::Player(GameMechs* thisGMRef, Food* thisFood)//default constructor
 {
-    mainGameMechsRef = thisGMRef;
-    playerPosList = new objPosArrayList();
-    direction = stop;
+    mainGameMechsRef = thisGMRef; //use this to access GameMechs methods
+    Foodref = thisFood; //use this to access Food methods
 
-    objPos headPos(mainGameMechsRef->getBoardSizeX()/2,mainGameMechsRef->getBoardSizeY()/2,'@');
-    playerPosList->insertHead(headPos);
-    // more actions to be included
+    playerPosList = new objPosArrayList(); //allocate heap space for snake list
+    direction = stop;//initialize direction enumeration to stop
 
-    // playerPos.pos->x = mainGameMechsRef->getBoardSizeX()/2;
-    // playerPos.pos->y = mainGameMechsRef->getBoardSizeY()/2;
-    // playerPos.symbol = '@';
+    objPos headPos(mainGameMechsRef->getBoardSizeX()/2, mainGameMechsRef->getBoardSizeY()/2, '@');
+    //^^initialize snake to begin at center of board
 
-    //cout << "here" << endl;
-
+    playerPosList->insertHead(headPos);//insert object into the snake list
 }
 
 
-Player::~Player()
+Player::~Player()//destructor
 {
-    // delete any heap members here
-    // no keyword new in the constructor
-    // leave the destructor empty FOR NOW
     delete playerPosList;
 }
 
-/*void Player::getPlayerPos(objPos &returnPos) const
-{
-    // return the reference to the playerPos arrray list
-    return playerPos;
-}*/
 
 objPosArrayList* Player::getPlayerPos() const
 {
@@ -50,15 +37,12 @@ void Player::updatePlayerDir()
         {                      
             case ' ':  // exit
                  mainGameMechsRef->setExitTrue();
-                 //exitFlag = 1;
-                 //printquit = 1;
                  break;
             case 'W':
             case 'w':
                 if (direction == left || direction == right || direction == stop)
                 {
                     direction = up;
-                    //startCount = 1;
                 }
                 break;
             case 'A':
@@ -66,7 +50,6 @@ void Player::updatePlayerDir()
                 if (direction == up || direction == down || direction == stop)
                 {
                     direction = left;
-                    //startCount = 1;
                 }
                 break;
             case 'S':
@@ -74,7 +57,6 @@ void Player::updatePlayerDir()
                 if (direction == left || direction == right || direction == stop )
                 {
                     direction = down;
-                    //startCount = 1;
                 }
                 break;
             case 'D':
@@ -82,11 +64,7 @@ void Player::updatePlayerDir()
                 if (direction == up || direction == down || direction == stop)
                 {
                     direction = right;
-                    //startCount = 1;
                 }
-                break;
-            case 'M':   //THIS IS A DEBUGGING THING THEY WANTED US TO DO
-                mainGameMechsRef->incrementScore();
                 break;
         }  
 
@@ -96,68 +74,100 @@ void Player::updatePlayerDir()
 void Player::movePlayer()
 {
     // PPA3 Finite State Machine logic
-    //Iteration 3: create a temporary objPos to calculate the new head position
-    //probably should get the head element of the playerPosList as a starting point
-    objPos temp;
-    temp = playerPosList->getHeadElement();//temp holds the element at the head of the snake...should this be the 
+    // create a temporary objPos to calculate tthe new head position
+    // probably should get the head element of the playerPosList 
+    // good astarting point
+
+    objPos temp = playerPosList->getHeadElement();
 
     switch(direction)
         {
-            //calculate new position of the head using the temp objPos
+            // calculate the new position of the head
+            // using the temp objPos
             case up:
-                //playerPos.pos->y--;
-                temp.pos->y--;  //is this legal??
+                temp.pos->y--;
                 break;
 
             case right:
-                //playerPos.pos->x++;
                 temp.pos->x++;
                 break;
 
             case left:
-                //playerPos.pos->x--;
                 temp.pos->x--;
                 break;
 
             case down:
-                //playerPos.pos->y++;
                 temp.pos->y++;
                 break;
         }
-        //insert temp objPos to the head of the list
-        playerPosList->insertHead(temp);
-        //***check if the new temp objPos overlaps with food pos (get from GameMechs class)
-        //if(temp.isPosEqual()) //Ahhh helppp
-        
-        //use isPosEqual method from objPos class to check overlap
-        //if overlapped, food consumed, do not remove snake tail, increase the score
-
-        //if no overlap, remove tail, complete movement.
-
-
-        //Chen doesn't have this block in his tutorial vid, is this the wraparound logic?
-        /*if(playerPos.pos->x < 1)
+        //wraparound logic
+        if(temp.pos->x < 1)
         {
-            playerPos.pos->x = mainGameMechsRef->getBoardSizeX() - 2;
+            temp.pos->x = mainGameMechsRef->getBoardSizeX() - 2;
         }
-        else if(playerPos.pos->x > mainGameMechsRef->getBoardSizeX() -1)
+        else if(temp.pos->x > mainGameMechsRef->getBoardSizeX() -2)
         {
-            playerPos.pos->x = 1;
+            temp.pos->x = 1;
         }
         
-        if(playerPos.pos->y < 1)
+        if(temp.pos->y < 1)
         {
-            playerPos.pos->y = mainGameMechsRef->getBoardSizeY() - 2;
+            temp.pos->y = mainGameMechsRef->getBoardSizeY() - 2;
         }
-        else if(playerPos.pos->y > mainGameMechsRef->getBoardSizeY() -1)
+        else if(temp.pos->y > mainGameMechsRef->getBoardSizeY() -2)
         {
-            playerPos.pos->y = 1;
-        }*/
+            temp.pos->y = 1;
+        }
+
+        objPos foo = Foodref->getFoodPos();//use this to hold the position of the food
+
+        for(int n = 1; n < playerPosList->getSize(); n++)//iterate through the snake list to make sure there is no self collision
+        {
+            if(playerPosList->getSize()>1)//only begin this check when the snake list holds more than 1 element
+            {
+                if(checkSelfCollision(n))
+                {
+                    //if the snake collides with itself set the exitflag to true and display lose message
+                    mainGameMechsRef->setLoseFlag();
+                    mainGameMechsRef->setExitTrue();
+                }
+            }
+
+        }
+        
+    
+
+        if(checkFoodCollision())
+        {
+            //if snake has collided with food, add element to head, DO NOT remove tail, generate new food item
+            playerPosList->insertHead(temp);
+            Foodref->generateFood(playerPosList);
+            mainGameMechsRef->incrementScore();
+        }
+        else
+        {
+            //when snake doesn't collide with food, add element to head and remove tail
+            playerPosList->insertHead(temp);
+            playerPosList->removeTail();
+        } 
 }
 
 // More methods to be added
 
-/*Dir Player:: getDirection() const  //i thought i needed this sorry babes   <3
-    {
-        return direction;
-    }*/ 
+bool Player::checkFoodCollision()
+{
+    objPos temp = playerPosList->getHeadElement();//use this to hold the element at the head of the snake
+    objPos foo = Foodref->getFoodPos();
+
+    bool collided = temp.isPosEqual(&foo);//if head element and food have the same position, set collided to true
+    return collided;
+}
+
+bool Player::checkSelfCollision(int index)
+{
+    objPos temp = playerPosList->getHeadElement();//use this to hold the element at the head of the snake
+    objPos element = playerPosList->getElement(index);//use this to hold the snake element at a specific index
+
+    bool collided = temp.isPosEqual(&element);//if head element and body elent have the same position, set collided to true
+    return collided;
+}
