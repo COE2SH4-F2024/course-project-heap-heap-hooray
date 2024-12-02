@@ -22,7 +22,7 @@ class Food
         ~Food();
 
         //void generateFood(const objPos& blockOff);
-        void generateFood(objPos blockOff);
+        void generateFood(objPosArrayList* blockOff);
         objPos getFoodPos() const;
 };
 
