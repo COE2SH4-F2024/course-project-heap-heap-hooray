@@ -9,7 +9,7 @@
 class Food
 {
     private:
-        objPosArrayList* foodBucket;
+        objPos foodPos;
     
     public:
         int xRange;
@@ -22,7 +22,7 @@ class Food
         ~Food();
 
         void generateFood(objPosArrayList* blockOff);
-        objPosArrayList* getFoodPos() const;
+        objPos getFoodPos() const;
 };
 
 #endif
