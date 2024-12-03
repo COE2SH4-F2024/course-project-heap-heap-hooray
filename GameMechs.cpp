@@ -53,7 +53,14 @@ void GameMechs::collectAsynchInput(Player *myPlayer, Food *myFood)
     {
         setExitTrue();
     }
-   
+    // else if (input == 'f') // 'f' triggers food regeneration
+    // {
+    //     if (myFood != nullptr && myPlayer != nullptr) // Ensure valid pointers
+    //     {
+    //         //objPos head = myPlayer->getPlayerPos()->getHeadElement();
+            
+    //     }
+    // }
 
 
 }
@@ -68,9 +75,12 @@ int GameMechs::getScore() const
     return score;
 }
 
-void GameMechs::incrementScore()
+void GameMechs::incrementScore(int repeat)
 {
-    score++;
+    for(int i = 0; i < repeat; i++)
+    {
+        score++;
+    }
 }
 
 int GameMechs::getBoardSizeX() const
@@ -104,3 +114,4 @@ void GameMechs::clearInput()
     input = 0;
 }
 
+// More methods should be added here

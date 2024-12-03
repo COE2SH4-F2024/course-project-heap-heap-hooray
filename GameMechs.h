@@ -7,6 +7,10 @@
 #include "objPos.h"
 #include "objPosArrayList.h"
 #include "Food.h"
+#include "Player.h"
+
+//#include "Food.h"
+//#include "Player.h"
 
 class Player;
 class Food;
@@ -44,7 +48,7 @@ class GameMechs
         int getBoardSizeY() const;
         
         int getScore() const;
-        void incrementScore();
+        void incrementScore(int repeat);
         
         // More methods should be added here
         void collectAsynchInput(Player *myPlayer, Food *myFood);
