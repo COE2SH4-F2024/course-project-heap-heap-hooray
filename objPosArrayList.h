@@ -14,11 +14,16 @@ class objPosArrayList
 
     public:
         objPosArrayList();
+        objPosArrayList(int size);
         ~objPosArrayList();
+        objPosArrayList(const objPosArrayList& other);
+        objPosArrayList& operator=(const objPosArrayList& other);
 
         int getSize() const;
         void insertHead(objPos thisPos);
         void insertTail(objPos thisPos);
+        void insertTailFood(objPos thisPos);
+        void setElement(objPos value, int index);
         void removeHead();
         void removeTail();
         
