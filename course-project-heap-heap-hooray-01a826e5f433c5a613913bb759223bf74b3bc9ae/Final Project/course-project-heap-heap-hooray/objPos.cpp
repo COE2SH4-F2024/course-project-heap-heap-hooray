@@ -4,7 +4,6 @@ using namespace std;
 
 objPos::objPos()
 {
-    pos = nullptr;
     pos = new Pos;
     pos->x = 0;
     pos->y = 0;
@@ -51,7 +50,6 @@ objPos& objPos :: operator=(const objPos&m)
     if(this!= &m)
     {
         delete pos; //new
-        pos = nullptr;
         this -> pos = new Pos;
 
         this->pos->x = m.pos->x;
@@ -78,7 +76,6 @@ objPos :: objPos(const objPos&m)
 objPos :: ~objPos()
 {
     delete pos;
-    pos = nullptr;
 
     //cout << "destroyer func called" << endl;
 }
@@ -97,7 +94,6 @@ void objPos::setObjPos(int xPos, int yPos, char sym)
     pos->x = xPos;
     pos->y = yPos;
     symbol = sym;
-
 }
 
 objPos objPos::getObjPos() const

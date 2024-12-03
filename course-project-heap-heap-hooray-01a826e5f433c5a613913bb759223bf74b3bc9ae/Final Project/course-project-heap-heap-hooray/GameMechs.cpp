@@ -1,7 +1,5 @@
 #include "GameMechs.h"
 #include "MacUILib.h"
-#include "Food.h"
-#include "Player.h"
 
 GameMechs::GameMechs()
 {
@@ -10,8 +8,8 @@ GameMechs::GameMechs()
     loseFlag = false;
     score = 0;
 
-    boardSizeX = 20;
-    boardSizeY = 10;
+    boardSizeX = 10;
+    boardSizeY = 20;
 }
 
 GameMechs::GameMechs(int boardX, int boardY)
@@ -28,8 +26,7 @@ GameMechs::GameMechs(int boardX, int boardY)
 // do you need a destructor?
 GameMechs::~GameMechs()
 {
-    // nothing on the heap
-    // destructor can stay empty for now
+    
 }
 
 bool GameMechs::getExitFlagStatus() const
@@ -39,79 +36,57 @@ bool GameMechs::getExitFlagStatus() const
 
 bool GameMechs::getLoseFlagStatus() const
 {
-    return loseFlag;
+
 }
     
-void GameMechs::collectAsynchInput(Player *myPlayer, Food *myFood)
+
+char GameMechs::getInput()
 {
     if (MacUILib_hasChar())
     {
         input = MacUILib_getChar();
     }
-
-    if(input == ' ')
-    {
-        setExitTrue();
-    }
-    // else if (input == 'f') // 'f' triggers food regeneration
-    // {
-    //     if (myFood != nullptr && myPlayer != nullptr) // Ensure valid pointers
-    //     {
-    //         //objPos head = myPlayer->getPlayerPos()->getHeadElement();
-            
-    //     }
-    // }
-
-
-}
-char GameMechs::getInput()
-{
-
-    return input;
 }
 
 int GameMechs::getScore() const
 {
-    return score;
+
 }
 
-void GameMechs::incrementScore(int repeat)
+void GameMechs::incrementScore()
 {
-    for(int i = 0; i < repeat; i++)
-    {
-        score++;
-    }
+    
 }
 
 int GameMechs::getBoardSizeX() const
 {
-    return boardSizeX;
+
 }
 
 int GameMechs::getBoardSizeY() const
 {
-    return boardSizeY;
+
 }
 
 
 void GameMechs::setExitTrue()
 {
-    exitFlag = true;
+
 }
 
 void GameMechs::setLoseFlag()
 {
-    loseFlag = true;
+    
 }
 
 void GameMechs::setInput(char this_input)
 {
-    input = this_input;
+
 }
 
 void GameMechs::clearInput()
 {
-    input = 0;
+
 }
 
 // More methods should be added here

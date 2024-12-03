@@ -2,7 +2,6 @@
 #define OBJPOS_H
 #include <iostream>
 
-
 // Not really a C++ thing
 typedef struct 
 {
